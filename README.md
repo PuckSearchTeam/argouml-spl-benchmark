@@ -8,7 +8,12 @@ A feature location benchmark for single systems and for families of systems. We 
 Read the description of the benchmark in: _J. Martinez, N. Ordoñez, X. Tërnava, T. Ziadi, J. Aponte, E. Figueiredo and M. T. Valente._
 **Feature Location Benchmark with ArgoUML SPL**. 22nd International Systems and Software Product Line Conference (SPLC 2018) Challenges Track. Gothenburg, Sweden, 10-14 Sept 2018
 
+Video explaining the benchmark: https://www.youtube.com/watch?v=fJS7RSOGui0
+
+SPLC Variability challenges website with current solutions: https://variability-challenges.github.io/2018/ArgoUMLSPL 
+
 **Abstract:** Feature location is a traceability recovery activity to identify the implementation elements associated to a characteristic of a system. Besides its relevance for software maintenance of a single system, feature location in a collection of systems received a lot of attention as a first step to re-engineer system variants (created through clone-and-own) into a Software Product Line (SPL). In this context, the objective is to unambiguously identify the boundaries of a feature inside a family of systems to later create reusable assets from these implementation elements. Among all the case studies in the SPL literature, variants derived from ArgoUML SPL stands out as the most used one (see https://but4reuse.github.io/espla_catalog/ESPLACatalog.html). However, the use of different settings, or the omission of relevant information (e.g., the exact configurations of the variants or the way the metrics are calculated), makes it difficult to reproduce or benchmark the different feature location techniques even if the same ArgoUML SPL is used. With the objective to foster the research area on feature location, we provide a set of common scenarios using ArgoUML SPL and a set of utils to obtain metrics based on the results of existing and novel feature location techniques.
+
 
 ## Setting-up
 1. Download this repository by clicking here https://github.com/but4reuse/argouml-spl-benchmark/archive/master.zip and unzip it somewhere in your computer.
@@ -165,7 +170,7 @@ Finally, FileUtils has standard helpful methods to manipulate files, write in fi
 
 ## Launching an ArgoUML variant (if you want to do it for some reason)
 
-If for some reason you want to launch a specific variant: in Eclipse, File -> import -> existing projects and select the folder of the generated variant. Now you will have this variant as an Eclipse project. Then, right click the file ArgoUML.launch that exists in the variant and click on Run as -> ArgoUML. The ArgoUML will be executed.
+If for some reason you want to launch a specific variant: in Eclipse, File -> import -> existing projects and select the folder of the generated variant. Now you will have this variant as an Eclipse project. Then, right click the file ArgoUML.launch that exists in the variant and click on Run as -> ArgoUML. The ArgoUML tool will be executed. Alternatively, you can right click the Main class of ArgoUML located in src/org/argouml/application/Main.java and click on Run as -> Java application
 
 Troubleshooting (ArgoUML variant is not launching). If it is not executed and you have an error in the Eclipse console
 
@@ -186,3 +191,28 @@ GroundTruthExtractor.java has a main method used to create the txt files in the 
 RandomScenariosConfigsGenerator.java has a main method used to define the random scenarios.
 
 ScenarioBuildXMLFilesGenerator.java has a main method used to create the build files of each scenario based on the content of the configs folder of each scenario.
+
+## Ground-truth clarifications
+The format of the ground-truth is explained in the [challenge case description](https://sites.google.com/site/jabiermartinezwebsite/ArgoUML_SPL_Benchmark.pdf), however, there is a special case that it is important to mention. The involved class is org.argouml.profile.UserDefinedProfile.UserDefinedProfile. To illustrate this case, you can find below the code of a class with a constructor method where a parameter is only present in case of FEATUREA. 
+
+```
+package myPackage;
+public class MethodParameters {
+
+public MethodParameters(String a, String b, 
+        //#if defined(FEATUREA)
+        //@#$LPS-FEATUREA:GranularityType:MethodSignature
+    		String c,
+        //#endif
+    		String d) {
+        // do something
+    }
+    
+}
+```
+The trace in the ground-truth will be the method with all the parameters and the refinement tag:
+```
+myPackage.MethodParameters MethodParameters(String,String,String,String) Refinement
+```
+This can be considered as arbitrary. Also correct would be "myPackage.MethodParameters MethodParameters(String,String,String) Refinement" for not_FEATUREA. Or even it can be considered two separate methods (one for FEATUREA and another for not_FEATUREA) with their corresponding parameters and without the refinement tag. For the moment, please use the method with all the parameters and the refinement tag for these cases.
+
