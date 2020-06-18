@@ -24,6 +24,7 @@ import org.junit.runner.Result;
 
 import groundTruthExtractor.tests.ExtractorTest;
 import utils.FileUtils;
+import utils.JDTUtils;
 import utils.TraceIdUtils;
 
 /**
@@ -174,7 +175,7 @@ public class GroundTruthExtractor {
 		cuRefinements.clear();
 
 		// Get a list of methods
-		List<MethodDeclaration> methods = getMethods(cu);
+		List<MethodDeclaration> methods = JDTUtils.getMethods(cu);
 		List<String> currentFeatures = new ArrayList<String>();
 		// Process the jpp comments
 		List<LineComment> jppComments = geJPPComments(cu, source);
@@ -215,7 +216,7 @@ public class GroundTruthExtractor {
 								System.out.println(id);
 							}
 						} else if (granularity.equals(GRANULARITY_METHOD) || granularity.equals(GRANULARITY_INTERFACEMETHOD)) {
-							List<MethodDeclaration> wrappingMethods = getWrappingMethods(methods,
+							List<MethodDeclaration> wrappingMethods = JDTUtils.getWrappingMethods(methods,
 									currentBlockStart.peek(), end);
 							if (!wrappingMethods.isEmpty()) {
 								for (MethodDeclaration method : wrappingMethods) {
@@ -228,7 +229,7 @@ public class GroundTruthExtractor {
 							}
 						} else {
 							// It is something else
-							MethodDeclaration method = getMethodThatContainsAPosition(methods, currentBlockStart.peek(),
+							MethodDeclaration method = JDTUtils.getMethodThatContainsAPosition(methods, currentBlockStart.peek(),
 									end);
 							if (method != null) {
 								// it is inside a method
@@ -292,23 +293,7 @@ public class GroundTruthExtractor {
 		featureToImplementationMap.put(feature, current);
 	}
 
-	/**
-	 * Get all methods
-	 * 
-	 * @param a
-	 *            compilation unit
-	 * @return list of methods
-	 */
-	public static List<MethodDeclaration> getMethods(CompilationUnit cu) {
-		List<MethodDeclaration> methods = new ArrayList<MethodDeclaration>();
-		cu.accept(new ASTVisitor() {
-			public boolean visit(MethodDeclaration node) {
-				methods.add(node);
-				return true;
-			}
-		});
-		return methods;
-	}
+
 
 	/**
 	 * Go comment by comment in the source code to find JPP annotations
@@ -425,49 +410,9 @@ public class GroundTruthExtractor {
 		return toReturn.toString();
 	}
 
-	/**
-	 * Get the method that is between a given start point and end point in the
-	 * source code String
-	 * 
-	 * @param methods
-	 * @param currentBlockStart
-	 * @param currentBlockEnd
-	 * @return methodDeclaration
-	 */
-	public static List<MethodDeclaration> getWrappingMethods(List<MethodDeclaration> methods, int currentBlockStart,
-			int currentBlockEnd) {
-		List<MethodDeclaration> wrappingMethods = new ArrayList<MethodDeclaration>();
-		// currentBlock is a wrapper of the method
-		for (MethodDeclaration method : methods) {
-			if (currentBlockStart < method.getStartPosition()) {
-				if (currentBlockEnd > method.getStartPosition() + method.getLength()) {
-					wrappingMethods.add(method);
-				}
-			}
-		}
-		return wrappingMethods;
-	}
 
-	/**
-	 * Get the method that contains (inside) a given position
-	 * 
-	 * @param methods
-	 * @param currentBlockStart
-	 * @param currentBlockEnd
-	 * @return
-	 */
-	public static MethodDeclaration getMethodThatContainsAPosition(List<MethodDeclaration> methods,
-			int currentBlockStart, int currentBlockEnd) {
-		// currentBlock is inside a method
-		for (MethodDeclaration method : methods) {
-			if (currentBlockStart >= method.getStartPosition()) {
-				if (currentBlockEnd <= method.getStartPosition() + method.getLength()) {
-					return method;
-				}
-			}
-		}
-		return null;
-	}
+
+
 
 	public static Pattern betweenParenthesisPattern = Pattern.compile("\\(([^)]+)\\)");
 
