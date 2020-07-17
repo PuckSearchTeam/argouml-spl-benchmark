@@ -26,14 +26,24 @@ public class FeatureUtils {
 	Map<String, File> mapConfigVariantFolder = new LinkedHashMap<String, File>();
 
 	/**
-	 * We get all the info in the constructor
+	 * We get all the info in the constructor. Default value for features
+	 * information path
 	 * 
 	 * @param scenarioFolderPath
 	 */
 	public FeatureUtils(String scenarioFolderPath) {
+		this(scenarioFolderPath, "featuresInfo/features.txt");
+	}
 
+	/**
+	 * We get all the info in the constructor
+	 * 
+	 * @param scenarioFolderPath
+	 * @param featureInfoPath
+	 */
+	public FeatureUtils(String scenarioFolderPath, String featuresInfoPath) {
 		// Get features information
-		List<String> lines = FileUtils.getLinesOfFile(new File("featuresInfo/features.txt"));
+		List<String> lines = FileUtils.getLinesOfFile(new File(featuresInfoPath));
 		for (String line : lines) {
 			String[] parts = line.split(";");
 			String featureId = parts[0];
@@ -141,6 +151,21 @@ public class FeatureUtils {
 	public List<String> getConfigurationsContainingFeature(String featureId) {
 		return mapFeatureConfigs.get(featureId);
 	}
+	
+	/**
+	 * Get the list of configurations that do not contain a feature
+	 * 
+	 * @param featureId
+	 * @return the list of configurations
+	 */
+	public List<String> getConfigurationsNotContainingFeature(String featureId) {
+		List<String> result = new ArrayList<String>();
+		result.addAll(getConfigurationIds());
+		for(String cont : mapFeatureConfigs.get(featureId)) {
+			result.remove(cont);
+		}
+		return result;
+	}
 
 	/**
 	 * Get the list of features of a given configuration
@@ -151,14 +176,14 @@ public class FeatureUtils {
 	public List<String> getFeaturesOfConfiguration(String configurationId) {
 		return mapConfigFeatures.get(configurationId);
 	}
-	
+
 	/**
 	 * Get variant folder of a given configuration
 	 * 
 	 * @param configurationId
 	 * @return the folder of this variant
 	 */
-	public File getVariantFolderOfConfig(String configurationId){
+	public File getVariantFolderOfConfig(String configurationId) {
 		return mapConfigVariantFolder.get(configurationId);
 	}
 }
