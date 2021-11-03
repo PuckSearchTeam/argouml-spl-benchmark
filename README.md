@@ -3,7 +3,7 @@
 # ArgoUML SPL Benchmark
 A feature location benchmark for single systems and for families of systems. We include the ground-truth, different scenarios and a program to calculate the feature location metrics.
 
-[<img src="https://github.com/but4reuse/argouml-spl-benchmark/blob/master/README_images/pdf.png" align="left" width="80" height="80">](https://sites.google.com/site/jabiermartinezwebsite/ArgoUML_SPL_Benchmark.pdf)
+[<img src="https://github.com/but4reuse/argouml-spl-benchmark/blob/master/README_images/pdf.png" align="left" width="80" height="80">](https://hal.sorbonne-universite.fr/hal-01722316/document)
 
 Read the description of the benchmark in: _J. Martinez, N. Ordoñez, X. Tërnava, T. Ziadi, J. Aponte, E. Figueiredo and M. T. Valente._
 **Feature Location Benchmark with ArgoUML SPL**. 22nd International Systems and Software Product Line Conference (SPLC 2018) Challenges Track. Gothenburg, Sweden, 10-14 Sept 2018
@@ -16,7 +16,7 @@ SPLC Variability challenges website with current solutions: https://variability-
 
 
 ## Setting-up
-1. Download this repository by clicking here https://github.com/but4reuse/argouml-spl-benchmark/archive/master.zip and unzip it somewhere in your computer.
+1. Download this repository by clicking here https://github.com/but4reuse/argouml-spl-benchmark/archive/master.zip and unzip it somewhere in your computer. Another option is to clone the repository from this git https://github.com/but4reuse/argouml-spl-benchmark.git
 
 2. We will call the Benchmark functionality directly from the Java source code of the benchmark so first you need an Integrated Development Environment (IDE) where you can run Java source code and Apache Ant scripts. But do not worry if you are not expert on them because you will not need to modify anything there, you will need just to launch programs and we will show you how to do it. We will explain the steps using Eclipse but you can use any IDE supporting Java and ant if you know how to do it.
 
@@ -68,6 +68,8 @@ Do not worry about the errors in the argouml- projects. The benchmark will work 
 In the ArgoUMLSPLBenchmark project, there is a folder called “scenarios” containing the predefined scenarios defined in the Benchmark. This step will allow to create the variants associated to each of these scenarios. There is a “configs” folder in each scenario with a list of config files that contains the list of features of each config.
 To start with, open the “ScenarioOriginalVariant” folder, then right click the build.xml file and click on Run As -> Ant Build
 
+Note: If you are interested in feature localization in single systems but not for families of systems, you only need the “ScenarioOriginalVariant”.
+
 <img align="middle" src="https://github.com/but4reuse/argouml-spl-benchmark/raw/master/README_images/image22.png"></center>
 
 The console will start showing the progress of the generation of the variants.
@@ -76,7 +78,7 @@ The console will start showing the progress of the generation of the variants.
 
 And it will tell you when it will be finished.
 
-<img align="middle" src="https://github.com/but4reuse/argouml-spl-benchmark/raw/master/README_images/image2.png"></center>
+<img align="middle" src="https://github.com/but4reuse/argouml-spl-benchmark/raw/master/README_images/image9.png"></center>
 
 Once the build is finished. Refresh the folder of the scenario (right click the folder and refresh, or select the folder and press F5). You will have a folder called "variants" with a set of folders (each folder contains a variant).
 
