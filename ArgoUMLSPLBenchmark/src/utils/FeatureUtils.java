@@ -146,12 +146,16 @@ public class FeatureUtils {
 	 * Get the list of configurations that contains a feature
 	 * 
 	 * @param featureId
-	 * @return the list of configurations
+	 * @return non-null list of configurations
 	 */
 	public List<String> getConfigurationsContainingFeature(String featureId) {
-		return mapFeatureConfigs.get(featureId);
+		List<String> configs = mapFeatureConfigs.get(featureId);
+		if (configs == null) {
+			configs = new ArrayList<String>();
+		}
+		return configs;
 	}
-	
+
 	/**
 	 * Get the list of configurations that do not contain a feature
 	 * 
@@ -160,8 +164,9 @@ public class FeatureUtils {
 	 */
 	public List<String> getConfigurationsNotContainingFeature(String featureId) {
 		List<String> result = new ArrayList<String>();
+		// we add all and then we remove the configs that contain the feature
 		result.addAll(getConfigurationIds());
-		for(String cont : mapFeatureConfigs.get(featureId)) {
+		for (String cont : getConfigurationsContainingFeature(featureId)) {
 			result.remove(cont);
 		}
 		return result;
