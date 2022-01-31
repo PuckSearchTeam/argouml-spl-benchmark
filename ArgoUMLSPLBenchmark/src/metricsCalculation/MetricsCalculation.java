@@ -23,6 +23,9 @@ public class MetricsCalculation {
 
 	private static final String EXTENSION = ".txt";
 
+	/**
+	 * Create results file and store it in the actual folder parent folder
+	 */
 	public static void main(String[] args) {
 		System.out.println("Metrics calculation");
 		File groundTruth = new File("groundTruth");
@@ -58,7 +61,7 @@ public class MetricsCalculation {
 	static double failedToRetrieve_counter;
 
 	/**
-	 * Create results file and store it in the actual folder parent folder
+	 * Create the content of the results file
 	 * 
 	 * @param actualFolder
 	 *            containing txt files with the actual values
