@@ -63,10 +63,8 @@ public class MetricsCalculation {
 	/**
 	 * Create the content of the results file
 	 * 
-	 * @param actualFolder
-	 *            containing txt files with the actual values
-	 * @param retrievedFolder
-	 *            containing txt files with the retrieved values
+	 * @param actualFolder    containing txt files with the actual values
+	 * @param retrievedFolder containing txt files with the retrieved values
 	 */
 	public static String getResults(File actualFolder, File retrievedFolder) {
 		StringBuilder resultsContent = new StringBuilder();
@@ -92,17 +90,17 @@ public class MetricsCalculation {
 						// no file was created so it did not find anything
 						retrievedLines = new ArrayList<String>();
 					}
-					
+
 					// Calculate metrics
 					double precision = getPrecision(actualLines, retrievedLines);
 					double recall = getRecall(actualLines, retrievedLines);
 					double f1measure = getF1(precision, recall);
-					
+
 					// Append the row to the results file
 					// get the name by removing the file extension
 					String name = f.getName().substring(0, f.getName().length() - EXTENSION.length());
 					resultsContent.append(name + ",");
-					
+
 					// precision
 					if (Double.isNaN(precision)) {
 						resultsContent.append("0,");
@@ -110,7 +108,7 @@ public class MetricsCalculation {
 						precisionAvg += precision;
 						resultsContent.append(precision + ",");
 					}
-					
+
 					// recall
 					if (Double.isNaN(recall)) {
 						resultsContent.append("0,");
@@ -118,7 +116,7 @@ public class MetricsCalculation {
 						recallAvg += recall;
 						resultsContent.append(recall + ",");
 					}
-					
+
 					// f1score
 					if (Double.isNaN(f1measure)) {
 						resultsContent.append("0,");
@@ -126,7 +124,7 @@ public class MetricsCalculation {
 						f1measureAvg += f1measure;
 						resultsContent.append(f1measure + ",");
 					}
-					
+
 					// something retrieved or not
 					if (retrievedLines.isEmpty()) {
 						failedToRetrieve_counter++;
@@ -141,52 +139,54 @@ public class MetricsCalculation {
 		resultsContent.append("Average,");
 		// precision avg.
 		precisionAvg = precisionAvg / numberOfActualFiles;
-		if(Double.isNaN(precisionAvg)){
+		if (Double.isNaN(precisionAvg)) {
 			resultsContent.append("0,");
 		} else {
 			resultsContent.append(precisionAvg + ",");
 		}
-		
+
 		// recall avg.
 		recallAvg = recallAvg / numberOfActualFiles;
-		if(Double.isNaN(recallAvg)){
+		if (Double.isNaN(recallAvg)) {
 			resultsContent.append("0,");
 		} else {
 			resultsContent.append(recallAvg + ",");
 		}
-		
+
 		// f1score avg.
 		f1measureAvg = f1measureAvg / numberOfActualFiles;
-		if(Double.isNaN(f1measureAvg)){
+		if (Double.isNaN(f1measureAvg)) {
 			resultsContent.append("0,");
 		} else {
-			resultsContent.append( f1measureAvg + ",");
+			resultsContent.append(f1measureAvg + ",");
 		}
-		
+
 		// total failed to retrieve
 		resultsContent.append(failedToRetrieve_counter + ",");
-		
+
 		// Check retrieved but inexistent in the actual folder
 		StringBuilder inexistent = new StringBuilder();
 		retrievedInexistentFeature_counter = 0;
-		for (File f : retrievedFolder.listFiles()) {
-			File fInActualFolder = new File(actualFolder, f.getName());
-			if (f.getName().endsWith(EXTENSION) && !fInActualFolder.exists()) {
-				// it does not exist in actual folder
-				retrievedInexistentFeature_counter++;
-				String name = f.getName().substring(0, f.getName().length() - EXTENSION.length());
-				inexistent.append(name);
-				inexistent.append(",");
+		if (retrievedFolder.listFiles() != null) {
+			for (File f : retrievedFolder.listFiles()) {
+				File fInActualFolder = new File(actualFolder, f.getName());
+				if (f.getName().endsWith(EXTENSION) && !fInActualFolder.exists()) {
+					// it does not exist in actual folder
+					retrievedInexistentFeature_counter++;
+					String name = f.getName().substring(0, f.getName().length() - EXTENSION.length());
+					inexistent.append(name);
+					inexistent.append(",");
+				}
 			}
 		}
 		resultsContent.append(retrievedInexistentFeature_counter + ",");
-		if(retrievedInexistentFeature_counter > 0){
+		if (retrievedInexistentFeature_counter > 0) {
 			// remove last comma
 			inexistent.setLength(inexistent.length() - 1);
 			// append list
 			resultsContent.append(inexistent.toString());
 		}
-		
+
 		return resultsContent.toString();
 	}
 
