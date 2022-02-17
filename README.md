@@ -195,7 +195,7 @@ RandomScenariosConfigsGenerator.java has a main method used to define the random
 ScenarioBuildXMLFilesGenerator.java has a main method used to create the build files of each scenario based on the content of the configs folder of each scenario.
 
 ## Ground-truth clarifications
-The format of the ground-truth is explained in the [challenge case description](https://sites.google.com/site/jabiermartinezwebsite/ArgoUML_SPL_Benchmark.pdf), however, there is a special case that it is important to mention. The involved class is org.argouml.profile.UserDefinedProfile.UserDefinedProfile. To illustrate this case, you can find below the code of a class with a constructor method where a parameter is only present in case of FEATUREA. 
+The format of the ground-truth is explained in the [challenge case description](https://hal.sorbonne-universite.fr/hal-01722316/document), however, there is a special case that it is important to mention. The involved class is org.argouml.profile.UserDefinedProfile.UserDefinedProfile. To illustrate this case, you can find below the code of a class with a constructor method where a parameter is only present in case of FEATUREA. 
 
 ```
 package myPackage;
